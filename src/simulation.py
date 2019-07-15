@@ -15,19 +15,23 @@ def nested_dict(n, type):
         return defaultdict(lambda: nested_dict(n-1, type))
     
 def plot_states(gammas, values, states, strategies, gameName = ''):
-    lines = ['ro:', 'bo-', 'go--']
+    styles = ['ro:', 'bo-', 'go--']
     titles = ['S3', 'S0', 'S1', 'S2']
+    lines = []
     for state in states:
         i = 0
         for strategy in strategies:
             #print('State {} - Strat {}: {}'.format(state, strategy, values[state][strategy]))
-            plt.plot(gammas, values[state][strategy], lines[i])
+            line, = plt.plot(gammas, values[state][strategy], styles[i], label=strategy)
+            lines.append(line)
             i+=1
         plt.title('State {}'.format(titles[state]))
+        plt.legend(handles=lines)
         plt.xlabel("Gamma")
         plt.ylabel("Defender´s utility")
-        plt.savefig('{}_state{}_values.png'.format(gameName, titles[state]))
+        plt.savefig('../img/{}_state{}_values.png'.format(gameName, titles[state]))
         plt.show()
+        lines = []
         #print()
          
 def print_iteration_info(gamma, strategyName, k, V, pi):
@@ -56,7 +60,7 @@ def simulate(game, strategies):
         for gamma in gammas:
             game.strategy.set_gamma(gamma) 
             V, pi = game.run()
-            print_iteration_info(gamma, strategy.get_name(), game.MAX_RUNS, V, pi)
+            #print_iteration_info(gamma, strategy.get_name(), game.MAX_RUNS, V, pi)
             for state in V.keys():
                 values[state][game.strategy.get_name()].append(V[state])
                 
@@ -69,4 +73,4 @@ simulate(game, strategies)
 
 strategies = [UniformRandom(), OptimalMixed()]
 game = Game(pCaseStudy(), 'caseStudy')
-#simulate(game, strategies)
+simulate(game, strategies)
