@@ -2,7 +2,6 @@
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from game import Game
-#from parameters4 import Parameters as p
 from parametersExample import Parameters as pExample
 from paramsCaseStudy import Parameters as pCaseStudy
 from strategy import *
@@ -21,7 +20,6 @@ def plot_states(gammas, values, states, strategies, gameName = ''):
     for state in states:
         i = 0
         for strategy in strategies:
-            #print('State {} - Strat {}: {}'.format(state, strategy, values[state][strategy]))
             line, = plt.plot(gammas, values[state][strategy], styles[i], label=strategy)
             lines.append(line)
             i+=1
@@ -32,7 +30,6 @@ def plot_states(gammas, values, states, strategies, gameName = ''):
         plt.savefig('../img/{}_state{}_values.png'.format(gameName, titles[state]))
         plt.show()
         lines = []
-        #print()
          
 def print_iteration_info(gamma, strategyName, k, V, pi):
     print ('---------------')
@@ -60,7 +57,7 @@ def simulate(game, strategies):
         for gamma in gammas:
             game.strategy.set_gamma(gamma) 
             V, pi = game.run()
-            #print_iteration_info(gamma, strategy.get_name(), game.MAX_RUNS, V, pi)
+            print_iteration_info(gamma, strategy.get_name(), game.MAX_RUNS, V, pi)
             for state in V.keys():
                 values[state][game.strategy.get_name()].append(V[state])
                 
